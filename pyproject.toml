@@ -1,0 +1,52 @@
+[project]
+name = "ai-project"
+version = "0.1.0"
+description = "Skeleton for building LLM agent applications"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.142.2",
+    "langchain-google-genai>=4.4.0",
+    "langgraph>=1.2.13",
+    "pydantic-settings>=2.15.0",
+    "uvicorn>=0.54.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# Each directory under src/ is installed as a top-level package, so imports
+# look like `from core.config import Settings` rather than `from ai_project...`.
+[tool.hatch.build.targets.wheel]
+packages = ["src/core", "src/agents", "src/tools", "src/api"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["agents", "api", "core", "tools"]
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "src"
+disallow_untyped_defs = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.0",
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "ruff>=0.16.10",
+]
